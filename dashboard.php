@@ -20,12 +20,12 @@
     <!-- Mobile Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <?php include 'function/sidebar.php'; ?>
+    <?php include 'layout/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Top Navigation -->
-      <?php include 'function/sidebar.php'; ?>
+      <?php include 'layout/navbar.php'; ?>
         <!-- Dashboard Content -->
         <div class="container-fluid py-3">
             <!-- Key Metrics Cards -->
