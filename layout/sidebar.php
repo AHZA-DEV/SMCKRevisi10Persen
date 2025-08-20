@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="account.html" class="nav-link">
+                <a href="" class="nav-link">
                     <i class="fas fa-user"></i>
                     <span>Your Account</span>
                     <i class="fas fa-chevron-right ms-auto"></i>
