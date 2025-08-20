@@ -19,9 +19,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Your Account</span>
+                <a href="dashboard.php?route=admin" class="nav-link">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
                     <i class="fas fa-chevron-right ms-auto"></i>
                 </a>
             </li>
