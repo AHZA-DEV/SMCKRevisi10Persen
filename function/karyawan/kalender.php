@@ -21,7 +21,7 @@ function getKalenderCuti($id_karyawan, $bulan = null, $tahun = null) {
               FROM cuti c 
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               WHERE $where_clause 
-              AND c.status IN ('Pending', 'Disetujui') 
+              AND c.status IN ('menunggu', 'disetujui') 
               ORDER BY c.tanggal_mulai";
     
     $stmt = mysqli_prepare($conn, $query);
@@ -51,7 +51,7 @@ function getKalenderCutiTim($id_karyawan, $bulan = null, $tahun = null) {
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               LEFT JOIN karyawan k ON c.id_karyawan = k.id 
               WHERE $where_clause 
-              AND c.status = 'Disetujui' 
+              AND c.status = 'disetujui' 
               AND c.id_karyawan != ? 
               ORDER BY c.tanggal_mulai";
     
@@ -129,9 +129,32 @@ function getLiburNasional($tahun) {
     ];
 }
 
+// Fungsi untuk mendapatkan cuti yang akan datang
+if (!function_exists('getCutiMendatang')) {
+    function getCutiMendatang($id_karyawan) {
+        global $conn;
+        
+        $query = "SELECT c.*, jc.nama_cuti 
+                  FROM cuti c 
+                  LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
+                  WHERE c.id_karyawan = ? 
+                  AND c.tanggal_mulai > NOW() 
+                  AND c.status IN ('menunggu', 'disetujui') 
+                  ORDER BY c.tanggal_mulai ASC 
+                  LIMIT 3";
+        
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "i", $id_karyawan);
+        mysqli_stmt_execute($stmt);
+        
+        return mysqli_stmt_get_result($stmt);
+    }
+}
+
 // Fungsi untuk cek apakah tanggal adalah weekend
 function isWeekend($tanggal) {
     $dayOfWeek = date('N', strtotime($tanggal));
     return ($dayOfWeek == 6 || $dayOfWeek == 7); // Saturday = 6, Sunday = 7
 }
 ?>
+

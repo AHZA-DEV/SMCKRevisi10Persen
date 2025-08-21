@@ -39,7 +39,7 @@ function getRiwayatCuti($id_karyawan, $filters = []) {
         $types .= "ss";
     }
     
-    $query = "SELECT c.*, jc.nama_cuti, jc.max_hari,
+    $query = "SELECT c.*, jc.nama_cuti, jc.maksimal_hari,
               CASE 
                   WHEN c.disetujui_oleh IS NOT NULL THEN CONCAT(k.nama_depan, ' ', k.nama_belakang)
                   ELSE NULL
@@ -48,7 +48,7 @@ function getRiwayatCuti($id_karyawan, $filters = []) {
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               LEFT JOIN karyawan k ON c.disetujui_oleh = k.id 
               WHERE $where_clause 
-              ORDER BY c.tanggal_pengajuan DESC";
+              ORDER BY c.created_at DESC";
     
     $stmt = mysqli_prepare($conn, $query);
     if (!empty($params)) {
@@ -75,11 +75,11 @@ function getStatistikRiwayat($id_karyawan, $tahun = null) {
     
     $query = "SELECT 
                 COUNT(*) as total_pengajuan,
-                COUNT(CASE WHEN status = 'Disetujui' THEN 1 END) as disetujui,
-                COUNT(CASE WHEN status = 'Ditolak' THEN 1 END) as ditolak,
-                COUNT(CASE WHEN status = 'Pending' THEN 1 END) as pending,
-                COUNT(CASE WHEN status = 'Dibatalkan' THEN 1 END) as dibatalkan,
-                COALESCE(SUM(CASE WHEN status = 'Disetujui' THEN jumlah_hari ELSE 0 END), 0) as total_hari_cuti
+                COUNT(CASE WHEN status = 'disetujui' THEN 1 END) as disetujui,
+                COUNT(CASE WHEN status = 'ditolak' THEN 1 END) as ditolak,
+                COUNT(CASE WHEN status = 'menunggu' THEN 1 END) as pending,
+                COUNT(CASE WHEN status = 'dibatalkan' THEN 1 END) as dibatalkan,
+                COALESCE(SUM(CASE WHEN status = 'disetujui' THEN jumlah_hari ELSE 0 END), 0) as total_hari_cuti
               FROM cuti 
               WHERE $where_clause";
     
@@ -98,7 +98,7 @@ function getRiwayatPerBulan($id_karyawan, $tahun) {
     $query = "SELECT 
                 MONTH(tanggal_mulai) as bulan,
                 COUNT(*) as jumlah_pengajuan,
-                COALESCE(SUM(CASE WHEN status = 'Disetujui' THEN jumlah_hari ELSE 0 END), 0) as hari_cuti
+                COALESCE(SUM(CASE WHEN status = 'disetujui' THEN jumlah_hari ELSE 0 END), 0) as hari_cuti
               FROM cuti 
               WHERE id_karyawan = ? AND YEAR(tanggal_mulai) = ? 
               GROUP BY MONTH(tanggal_mulai) 
@@ -128,7 +128,7 @@ function getRiwayatPerJenisCuti($id_karyawan, $tahun = null) {
     $query = "SELECT 
                 jc.nama_cuti,
                 COUNT(*) as jumlah_pengajuan,
-                COALESCE(SUM(CASE WHEN c.status = 'Disetujui' THEN c.jumlah_hari ELSE 0 END), 0) as hari_cuti
+                COALESCE(SUM(CASE WHEN c.status = 'disetujui' THEN c.jumlah_hari ELSE 0 END), 0) as hari_cuti
               FROM cuti c 
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               WHERE $where_clause 
@@ -176,7 +176,7 @@ function exportRiwayatCSV($id_karyawan, $filters = []) {
             $row['jumlah_hari'],
             $row['status'],
             $row['alasan'],
-            date('d/m/Y H:i', strtotime($row['tanggal_pengajuan'])),
+            date('d/m/Y H:i', strtotime($row['created_at'])),
             $row['nama_penyetuju'] ?: '-'
         ]);
     }
@@ -200,3 +200,4 @@ function getTahunRiwayat($id_karyawan) {
     return mysqli_stmt_get_result($stmt);
 }
 ?>
+

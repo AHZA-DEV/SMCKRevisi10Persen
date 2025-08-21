@@ -1,4 +1,3 @@
-
 <?php
 include 'function/karyawan/cuti.php';
 $cuti_list = getCutiKaryawan($_SESSION['user_id']);
@@ -136,9 +135,9 @@ $cuti_list = getCutiKaryawan($_SESSION['user_id']);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
+                            <?php
                             $no = 1;
-                            while ($row = mysqli_fetch_assoc($cuti_list)): 
+                            while ($row = mysqli_fetch_assoc($cuti_list)):
                             ?>
                             <tr>
                                 <td><?php echo $no++; ?></td>
@@ -161,7 +160,7 @@ $cuti_list = getCutiKaryawan($_SESSION['user_id']);
                                     ?>
                                     <span class="badge bg-<?php echo $badge_class; ?>"><?php echo $row['status']; ?></span>
                                 </td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($row['tanggal_pengajuan'])); ?></td>
+                                <td><?php echo date('d/m/Y H:i', strtotime($row['created_at'])); ?></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
                                         <?php if ($row['status'] == 'Pending'): ?>
@@ -207,7 +206,7 @@ $cuti_list = getCutiKaryawan($_SESSION['user_id']);
 document.getElementById('filterStatus').addEventListener('change', function() {
     const status = this.value.toLowerCase();
     const rows = document.querySelectorAll('tbody tr');
-    
+
     rows.forEach(row => {
         if (status === '' || row.innerHTML.toLowerCase().includes(status)) {
             row.style.display = '';
@@ -222,7 +221,7 @@ function showDetail(id) {
     document.getElementById('modalContent').innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
     const modal = new bootstrap.Modal(document.getElementById('detailModal'));
     modal.show();
-    
+
     // Load detail via fetch (simplified)
     // In real implementation, you would fetch detail from server
     setTimeout(() => {

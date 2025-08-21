@@ -17,6 +17,11 @@ function getDashboardSummary($id_karyawan) {
     mysqli_stmt_execute($stmt1);
     $karyawan = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt1));
     
+    // Add null check
+    if (!$karyawan) {
+        $karyawan = [];
+    }
+    
     // Statistik cuti tahun ini
     $tahun_ini = date('Y');
     $query2 = "SELECT 
@@ -52,7 +57,7 @@ function getCutiTerbaru($id_karyawan, $limit = 5) {
               FROM cuti c 
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               WHERE c.id_karyawan = ? 
-              ORDER BY c.tanggal_pengajuan DESC 
+              ORDER BY c.created_at DESC 
               LIMIT ?";
     
     $stmt = mysqli_prepare($conn, $query);
@@ -120,14 +125,14 @@ function getAktivitasTerbaru($id_karyawan, $limit = 5) {
     
     $query = "SELECT 
                 c.id,
-                c.tanggal_pengajuan as tanggal,
+                c.created_at as tanggal,
                 CONCAT('Mengajukan cuti ', jc.nama_cuti) as aktivitas,
                 c.status,
                 'cuti' as tipe
               FROM cuti c 
               LEFT JOIN jenis_cuti jc ON c.id_jenis_cuti = jc.id 
               WHERE c.id_karyawan = ? 
-              ORDER BY c.tanggal_pengajuan DESC 
+              ORDER BY c.created_at DESC 
               LIMIT ?";
     
     $stmt = mysqli_prepare($conn, $query);
@@ -203,3 +208,4 @@ function getPerbandinganDepartemen($id_karyawan) {
     return $row['rata_rata_departemen'] ?: 0;
 }
 ?>
+
