@@ -2,6 +2,14 @@
 session_start();
 include_once 'function/auth.php';
 
+// Debug: Cek session
+if (isset($_GET['debug'])) {
+    echo '<pre>';
+    print_r($_SESSION);
+    echo '</pre>';
+    exit;
+}
+
 // Jika belum login, redirect ke login
 if (!isLoggedIn()) {
     header("Location: login.php");

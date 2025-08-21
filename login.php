@@ -1,5 +1,14 @@
 <?php
+session_start();
 include_once 'function/auth.php';
+
+// Debug mode - tambahkan ?debug=1 di URL untuk melihat session
+if (isset($_GET['debug'])) {
+    echo '<pre>';
+    echo 'Session data: ';
+    print_r($_SESSION);
+    echo '</pre>';
+}
 
 // Jika sudah login, redirect ke dashboard sesuai role
 if (isLoggedIn()) {
