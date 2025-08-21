@@ -31,22 +31,24 @@
             </div>
 
             <div class="nav-item">
-                <div class="message-icon">
-                    <i class="fas fa-envelope"></i>
+                <div class="notification-bell">
+                    <a href="logout.php" class="logout-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 </div>
             </div>
 
             <div class="nav-item">
-                                            <div class="user-profile">
-                        <div class="user-info">
-                            <span class="user-name">Alex Santos</span>
-                            <span class="user-status">Online</span>
-                        </div>
-                                                    <div class="user-avatar">
+                <div class="user-profile">
+                    <div class="user-info">
+                        <span class="user-name">Alex Santos</span>
+                        <span class="user-status">Online</span>
+                    </div>
+                    <div class="user-avatar">
                         <div class="avatar-placeholder">AS</div>
                     </div>
-                        <i class="fas fa-cog"></i>
-                    </div>
+                    <i class="fas fa-cog"></i>
+                </div>
             </div>
         </div>
     </div>

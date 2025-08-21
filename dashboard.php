@@ -1,3 +1,16 @@
+<?php
+session_start();
+include_once 'function/auth.php';
+
+// Jika belum login, redirect ke login
+if (!isLoggedIn()) {
+    header("Location: login.php");
+    exit;
+}
+
+// Include menu function untuk routing
+// include_once 'function/menu.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +42,7 @@
         <!-- Dashboard Content -->
         <div class="container-fluid py-3">
             <!-- Key Metrics Cards -->
-            <div class="card">
+            <div class="row">
               <?php include 'function/menu.php'; ?>
             </div>
         </div>
